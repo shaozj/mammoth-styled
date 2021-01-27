@@ -1,20 +1,21 @@
 {
-  "name": "mammoth",
-  "version": "1.4.16",
-  "author": "Michael Williamson <mike@zwobble.org>",
-  "description": "Convert Word documents from docx to simple HTML and Markdown",
+  "name": "mammoth-styled",
+  "version": "1.0.0",
+  "author": "Zhenjiang Shao <814184517@qq.com>, Michael Williamson <mike@zwobble.org>",
+  "description": "Convert Word documents from docx to simple HTML and Markdown with style",
   "keywords": [
     "docx",
     "html",
     "office",
     "word",
     "markdown",
-    "md"
+    "md",
+    "style"
   ],
   "main": "./lib/index.js",
   "repository": {
-    "type": "git",
-    "url": "https://github.com/mwilliamson/mammoth.js.git"
+    "type": "https",
+    "url": "https://github.com/shaozj/mammoth-styled"
   },
   "dependencies": {
     "argparse": "~1.0.3",
@@ -47,6 +48,7 @@
   "scripts": {
     "pretest": "eslint lib test",
     "test": "mocha 'test/**/*.tests.js'",
+    "test-only": "mocha",
     "prepublish": "make mammoth.browser.min.js"
   },
   "license": "BSD-2-Clause"
