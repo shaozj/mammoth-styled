@@ -49,8 +49,7 @@
   "scripts": {
     "pretest": "eslint lib test",
     "test": "mocha 'test/**/*.tests.js'",
-    "test-only": "mocha",
-    "prepublish": "make mammoth.browser.min.js"
+    "test-only": "mocha"
   },
   "license": "BSD-2-Clause"
 }
