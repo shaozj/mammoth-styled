@@ -20,7 +20,7 @@
             "name": "Debug",
             "cwd": "${workspaceFolder}",
             "program": "${workspaceRoot}/bin/mammoth",
-            "args": [ "${workspaceFolder}/test/test-data/center.docx", "output.html", "--style-map=custom-style-map" ]
+            "args": [ "${workspaceFolder}/test/test-data/center2.docx", "output.html", "--style-map=custom-style-map" ]
         },
         {
             "type": "node",
