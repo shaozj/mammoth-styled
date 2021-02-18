@@ -1,133 +1,134 @@
-var assert = require("assert");
+'use strict';
 
-var readStylesXml = require("../../lib/docx/styles-reader").readStylesXml;
-var XmlElement = require("../../lib/xml").Element;
-var test = require("../test")(module);
+const assert = require('assert');
+
+const readStylesXml = require('../../lib/docx/styles-reader').readStylesXml;
+const XmlElement = require('../../lib/xml').Element;
 
 
-test('paragraph style is null if no style with that ID exists', function() {
-    var styles = readStylesXml(
-        new XmlElement("w:styles", {}, [])
-    );
-    assert.equal(styles.findParagraphStyleById("Heading1"), null);
+it('paragraph style is undefined if no style with that ID exists', function() {
+  const styles = readStylesXml(
+    new XmlElement('w:styles', {}, [])
+  );
+  assert.strictEqual(styles.findParagraphStyleById('Heading1'), undefined);
 });
 
-test('paragraph style can be found by ID', function() {
-    var styles = readStylesXml(
-        new XmlElement("w:styles", {}, [
-            paragraphStyleElement("Heading1", "Heading 1")
-        ])
-    );
-    assert.equal(styles.findParagraphStyleById("Heading1").styleId, "Heading1");
+it('paragraph style can be found by ID', function() {
+  const styles = readStylesXml(
+    new XmlElement('w:styles', {}, [
+      paragraphStyleElement('Heading1', 'Heading 1'),
+    ])
+  );
+  assert.strictEqual(styles.findParagraphStyleById('Heading1').styleId, 'Heading1');
 });
 
-test('table style can be found by ID', function() {
-    var styles = readStylesXml(
-        new XmlElement("w:styles", {}, [
-            tableStyleElement("TableNormal", "Normal Table")
-        ])
-    );
-    assert.equal(styles.findTableStyleById("TableNormal").styleId, "TableNormal");
+it('table style can be found by ID', function() {
+  const styles = readStylesXml(
+    new XmlElement('w:styles', {}, [
+      tableStyleElement('TableNormal', 'Normal Table'),
+    ])
+  );
+  assert.strictEqual(styles.findTableStyleById('TableNormal').styleId, 'TableNormal');
 });
 
-test('character style can be found by ID', function() {
-    var styles = readStylesXml(
-        new XmlElement("w:styles", {}, [
-            characterStyleElement("Heading1Char", "Heading 1 Char")
-        ])
-    );
-    assert.equal(styles.findCharacterStyleById("Heading1Char").styleId, "Heading1Char");
+it('character style can be found by ID', function() {
+  const styles = readStylesXml(
+    new XmlElement('w:styles', {}, [
+      characterStyleElement('Heading1Char', 'Heading 1 Char'),
+    ])
+  );
+  assert.strictEqual(styles.findCharacterStyleById('Heading1Char').styleId, 'Heading1Char');
 });
 
-test('paragraph and character styles are distinct', function() {
-    var styles = readStylesXml(
-        new XmlElement("w:styles", {}, [
-            paragraphStyleElement("Heading1", "Heading 1"),
-            characterStyleElement("Heading1Char", "Heading 1 Char")
-        ])
-    );
-    assert.equal(styles.findCharacterStyleById("Heading1"), null);
-    assert.equal(styles.findParagraphStyleById("Heading1Char"), null);
+it('paragraph and character styles are distinct', function() {
+  const styles = readStylesXml(
+    new XmlElement('w:styles', {}, [
+      paragraphStyleElement('Heading1', 'Heading 1'),
+      characterStyleElement('Heading1Char', 'Heading 1 Char'),
+    ])
+  );
+  assert.strictEqual(styles.findCharacterStyleById('Heading1'), undefined);
+  assert.strictEqual(styles.findParagraphStyleById('Heading1Char'), undefined);
 });
 
-test('character and table styles are distinct', function() {
-    var styles = readStylesXml(
-        new XmlElement("w:styles", {}, [
-            tableStyleElement("Heading1", "Heading 1")
-        ])
-    );
-    assert.equal(styles.findCharacterStyleById("Heading1"), null);
+it('character and table styles are distinct', function() {
+  const styles = readStylesXml(
+    new XmlElement('w:styles', {}, [
+      tableStyleElement('Heading1', 'Heading 1'),
+    ])
+  );
+  assert.strictEqual(styles.findCharacterStyleById('Heading1'), undefined);
 });
 
-test('styles include names', function() {
-    var styles = readStylesXml(
-        new XmlElement("w:styles", {}, [
-            paragraphStyleElement("Heading1", "Heading 1")
-        ])
-    );
-    assert.equal(styles.findParagraphStyleById("Heading1").name, "Heading 1");
+it('styles include names', function() {
+  const styles = readStylesXml(
+    new XmlElement('w:styles', {}, [
+      paragraphStyleElement('Heading1', 'Heading 1'),
+    ])
+  );
+  assert.strictEqual(styles.findParagraphStyleById('Heading1').name, 'Heading 1');
 });
 
-test('style name is null if w:name element does not exist', function() {
-    var styles = readStylesXml(
-        new XmlElement("w:styles", {}, [
-            styleWithoutWNameElement("paragraph", "Heading1"),
-            styleWithoutWNameElement("character", "Heading1Char")
-        ])
-    );
-    assert.equal(styles.findParagraphStyleById("Heading1").name, null);
-    assert.equal(styles.findCharacterStyleById("Heading1Char").name, null);
+it('style name is undefined if w:name element does not exist', function() {
+  const styles = readStylesXml(
+    new XmlElement('w:styles', {}, [
+      styleWithoutWNameElement('paragraph', 'Heading1'),
+      styleWithoutWNameElement('character', 'Heading1Char'),
+    ])
+  );
+  assert.strictEqual(styles.findParagraphStyleById('Heading1').name, null);
+  assert.strictEqual(styles.findCharacterStyleById('Heading1Char').name, null);
 });
 
-test('numbering style is null if no style with that ID exists', function() {
-    var styles = readStylesXml(
-        new XmlElement("w:styles", {}, [])
-    );
-    assert.equal(styles.findNumberingStyleById("List1"), null);
+it('numbering style is undefined if no style with that ID exists', function() {
+  const styles = readStylesXml(
+    new XmlElement('w:styles', {}, [])
+  );
+  assert.strictEqual(styles.findNumberingStyleById('List1'), undefined);
 });
 
-test('numbering style has null numId if style has no paragraph properties', function() {
-    var styles = readStylesXml(
-        new XmlElement("w:styles", {}, [
-            new XmlElement("w:style", {"w:type": "numbering", "w:styleId": "List1"})
-        ])
-    );
-    assert.equal(styles.findNumberingStyleById("List1").numId, null);
+it('numbering style has undefined numId if style has no paragraph properties', function() {
+  const styles = readStylesXml(
+    new XmlElement('w:styles', {}, [
+      new XmlElement('w:style', { 'w:type': 'numbering', 'w:styleId': 'List1' }),
+    ])
+  );
+  assert.strictEqual(styles.findNumberingStyleById('List1').numId, undefined);
 });
 
-test('numbering style has numId read from paragraph properties', function() {
-    var styles = readStylesXml(
-        new XmlElement("w:styles", {}, [
-            new XmlElement("w:style", {"w:type": "numbering", "w:styleId": "List1"}, [
-                new XmlElement("w:pPr", {}, [
-                    new XmlElement("w:numPr", {}, [
-                        new XmlElement("w:numId", {"w:val": "42"})
-                    ])
-                ])
-            ])
-        ])
-    );
-    assert.equal(styles.findNumberingStyleById("List1").numId, "42");
+it('numbering style has numId read from paragraph properties', function() {
+  const styles = readStylesXml(
+    new XmlElement('w:styles', {}, [
+      new XmlElement('w:style', { 'w:type': 'numbering', 'w:styleId': 'List1' }, [
+        new XmlElement('w:pPr', {}, [
+          new XmlElement('w:numPr', {}, [
+            new XmlElement('w:numId', { 'w:val': '42' }),
+          ]),
+        ]),
+      ]),
+    ])
+  );
+  assert.strictEqual(styles.findNumberingStyleById('List1').numId, '42');
 });
 
 function paragraphStyleElement(id, name) {
-    return styleElement("paragraph", id, name);
+  return styleElement('paragraph', id, name);
 }
 
 function characterStyleElement(id, name) {
-    return styleElement("character", id, name);
+  return styleElement('character', id, name);
 }
 
 function tableStyleElement(id, name) {
-    return styleElement("table", id, name);
+  return styleElement('table', id, name);
 }
 
 function styleElement(type, id, name) {
-    return new XmlElement("w:style", {"w:type": type, "w:styleId": id}, [
-        new XmlElement("w:name", {"w:val": name}, [])
-    ]);
+  return new XmlElement('w:style', { 'w:type': type, 'w:styleId': id }, [
+    new XmlElement('w:name', { 'w:val': name }, []),
+  ]);
 }
 
 function styleWithoutWNameElement(type, id) {
-    return new XmlElement("w:style", {"w:type": type, "w:styleId": id}, []);
+  return new XmlElement('w:style', { 'w:type': type, 'w:styleId': id }, []);
 }

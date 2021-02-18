@@ -1,104 +1,105 @@
-var hamjest = require("hamjest");
-var assertThat = hamjest.assertThat;
-var contains = hamjest.contains;
-var hasProperties = hamjest.hasProperties;
+'use strict';
 
-var tokenise = require("../../../lib/styles/parser/tokeniser").tokenise;
-var test = require("../../test")(module);
+const hamjest = require('hamjest');
+const assertThat = hamjest.assertThat;
+const contains = hamjest.contains;
+const hasProperties = hamjest.hasProperties;
+
+const tokenise = require('../../../lib/styles/parser/tokeniser').tokenise;
 
 
-test("unknown tokens are tokenised", function() {
-    assertTokens("~", [isToken("unrecognisedCharacter", "~")]);
+it('unknown tokens are tokenised', function() {
+  assertTokens('~', [ isToken('unrecognisedCharacter', '~') ]);
 });
 
-test("empty string is tokenised to end of file token", function() {
-    assertTokens("", []);
+it('empty string is tokenised to end of file token', function() {
+  assertTokens('', []);
 });
 
-test("whitespace is tokenised", function() {
-    assertTokens(" \t\t  ", [isToken("whitespace")]);
+it('whitespace is tokenised', function() {
+  assertTokens(' \t\t  ', [ isToken('whitespace') ]);
 });
 
-test("identifiers are tokenised", function() {
-    assertTokens("Overture", [isToken("identifier", "Overture")]);
+it('identifiers are tokenised', function() {
+  assertTokens('Overture', [ isToken('identifier', 'Overture') ]);
 });
 
-test("integers are tokenised", function() {
-    assertTokens("123", [isToken("integer", "123")]);
+it('integers are tokenised', function() {
+  assertTokens('123', [ isToken('integer', '123') ]);
 });
 
-test("strings are tokenised", function() {
-    assertTokens("'Tristan'", [isToken("string", "Tristan")]);
+it('strings are tokenised', function() {
+  assertTokens("'Tristan'", [ isToken('string', 'Tristan') ]);
 });
 
-test("unterminated strings are tokenised", function() {
-    assertTokens("'Tristan", [isToken("unterminated-string", "Tristan")]);
+it('unterminated strings are tokenised', function() {
+  assertTokens("'Tristan", [ isToken('unterminated-string', 'Tristan') ]);
 });
 
-test("arrows are tokenised", function() {
-    assertTokens("=>", [isToken("arrow")]);
+it('arrows are tokenised', function() {
+  assertTokens('=>', [ isToken('arrow') ]);
 });
 
-test("classes are tokenised", function() {
-    assertTokens(".overture", [isToken("dot"), isToken("identifier", "overture")]);
+it('classes are tokenised', function() {
+  assertTokens('.overture', [ isToken('dot'), isToken('identifier', 'overture') ]);
 });
 
-test("colons are tokenised", function() {
-    assertTokens("::", [isToken("colon"), isToken("colon")]);
+it('colons are tokenised', function() {
+  assertTokens('::', [ isToken('colon'), isToken('colon') ]);
 });
 
-test("greater thans are tokenised", function() {
-    assertTokens(">>", [isToken("gt"), isToken("gt")]);
+it('greater thans are tokenised', function() {
+  assertTokens('>>', [ isToken('gt'), isToken('gt') ]);
 });
 
-test("equals are tokenised", function() {
-    assertTokens("==", [isToken("equals"), isToken("equals")]);
+it('equals are tokenised', function() {
+  assertTokens('==', [ isToken('equals'), isToken('equals') ]);
 });
 
-test("startsWith symbols are tokenised", function() {
-    assertTokens("^=^=", [isToken("startsWith"), isToken("startsWith")]);
+it('startsWith symbols are tokenised', function() {
+  assertTokens('^=^=', [ isToken('startsWith'), isToken('startsWith') ]);
 });
 
-test("open parens are tokenised", function() {
-    assertTokens("((", [isToken("open-paren"), isToken("open-paren")]);
+it('open parens are tokenised', function() {
+  assertTokens('((', [ isToken('open-paren'), isToken('open-paren') ]);
 });
 
-test("close parens are tokenised", function() {
-    assertTokens("))", [isToken("close-paren"), isToken("close-paren")]);
+it('close parens are tokenised', function() {
+  assertTokens('))', [ isToken('close-paren'), isToken('close-paren') ]);
 });
 
-test("open square brackets are tokenised", function() {
-    assertTokens("[[", [isToken("open-square-bracket"), isToken("open-square-bracket")]);
+it('open square brackets are tokenised', function() {
+  assertTokens('[[', [ isToken('open-square-bracket'), isToken('open-square-bracket') ]);
 });
 
-test("close square brackets are tokenised", function() {
-    assertTokens("]]", [isToken("close-square-bracket"), isToken("close-square-bracket")]);
+it('close square brackets are tokenised', function() {
+  assertTokens(']]', [ isToken('close-square-bracket'), isToken('close-square-bracket') ]);
 });
 
-test("choices are tokenised", function() {
-    assertTokens("||", [isToken("choice"), isToken("choice")]);
+it('choices are tokenised', function() {
+  assertTokens('||', [ isToken('choice'), isToken('choice') ]);
 });
 
-test("can tokenise multiple tokens", function() {
-    assertTokens("The Magic Position", [
-        isToken("identifier", "The"),
-        isToken("whitespace"),
-        isToken("identifier", "Magic"),
-        isToken("whitespace"),
-        isToken("identifier", "Position")
-    ]);
+it('can tokenise multiple tokens', function() {
+  assertTokens('The Magic Position', [
+    isToken('identifier', 'The'),
+    isToken('whitespace'),
+    isToken('identifier', 'Magic'),
+    isToken('whitespace'),
+    isToken('identifier', 'Position'),
+  ]);
 });
 
 function assertTokens(input, expectedTokens) {
-    assertThat(
-        tokenise(input),
-        contains.apply(null, expectedTokens.concat([isToken("end", null)]))
-    );
+  assertThat(
+    tokenise(input),
+    contains.apply(null, expectedTokens.concat([ isToken('end', null) ]))
+  );
 }
 
 function isToken(tokenType, value) {
-    return hasProperties({
-        name: tokenType,
-        value: value
-    });
+  return hasProperties({
+    name: tokenType,
+    value,
+  });
 }

@@ -1,34 +1,34 @@
-var assert = require("assert");
+'use strict';
 
-var hamjest = require("hamjest");
-var assertThat = hamjest.assertThat;
-var contains = hamjest.contains;
-var hasProperties = hamjest.hasProperties;
+const assert = require('assert');
 
-var mammoth = require("../");
-var documents = require("../lib/documents");
-var promises = require("../lib/promises");
+const hamjest = require('hamjest');
+const assertThat = hamjest.assertThat;
+const contains = hamjest.contains;
+const hasProperties = hamjest.hasProperties;
 
-var test = require("./test")(module);
+const mammoth = require('../');
+const documents = require('../lib/documents');
+const promises = require('../lib/promises');
 
 
-test('mammoth.images.inline() should be an alias of mammoth.images.imgElement()', function() {
-    assert.ok(mammoth.images.inline === mammoth.images.imgElement);
+it('mammoth.images.inline() should be an alias of mammoth.images.imgElement()', function() {
+  assert.ok(mammoth.images.inline === mammoth.images.imgElement);
 });
 
 
-test('mammoth.images.dataUri() encodes images in base64', function() {
-    var imageBuffer = new Buffer("abc");
-    var image = new documents.Image({
-        readImage: function(encoding) {
-            return promises.when(imageBuffer.toString(encoding));
-        },
-        contentType: "image/jpeg"
-    });
-    
-    return mammoth.images.dataUri(image).then(function(result) {
-        assertThat(result, contains(
-            hasProperties({tag: hasProperties({attributes: {"src": "data:image/jpeg;base64,YWJj"}})})
-        ));
-    });
+it('mammoth.images.dataUri() encodes images in base64', function() {
+  const imageBuffer = Buffer.from('abc');
+  const image = new documents.Image({
+    readImage(encoding) {
+      return promises.when(imageBuffer.toString(encoding));
+    },
+    contentType: 'image/jpeg',
+  });
+
+  return mammoth.images.dataUri(image).then(function(result) {
+    assertThat(result, contains(
+      hasProperties({ tag: hasProperties({ attributes: { src: 'data:image/jpeg;base64,YWJj' } }) })
+    ));
+  });
 });

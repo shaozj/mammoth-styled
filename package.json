@@ -36,8 +36,8 @@
     "eslint": "^7.19.0",
     "eslint-config-egg": "^9.0.0",
     "hamjest": "2.13.0",
-    "mocha": "~2.2.5",
-    "temp": "~0.7.0",
+    "mocha": "^8.2.1",
+    "temp": "^0.9.4",
     "uglify-js": "~2.4.8"
   },
   "browser": {
@@ -48,7 +48,7 @@
     "mammoth": "bin/mammoth"
   },
   "scripts": {
-    "pretest": "eslint lib test",
+    "eslint": "eslint ./ --fix",
     "test": "mocha 'test/**/*.tests.js'",
     "test-only": "mocha"
   },

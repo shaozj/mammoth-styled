@@ -1,15 +1,16 @@
-var assert = require("assert");
+'use strict';
 
-var results = require("../lib/results");
-var Result = results.Result;
-var test = require("./test")(module);
+const assert = require('assert');
+
+const results = require('../lib/results');
+const Result = results.Result;
 
 
-test("Result.combine removes any duplicate messages", function() {
-    var first = new Result(null, [results.warning("Warning...")]);
-    var second = new Result(null, [results.warning("Warning...")]);
+it('Result.combine removes any duplicate messages', function() {
+  const first = new Result(null, [ results.warning('Warning...') ]);
+  const second = new Result(null, [ results.warning('Warning...') ]);
 
-    var combined = Result.combine([first, second]);
+  const combined = Result.combine([ first, second ]);
 
-    assert.deepEqual(combined.messages, [results.warning("Warning...")]);
+  assert.deepStrictEqual(combined.messages, [ results.warning('Warning...') ]);
 });

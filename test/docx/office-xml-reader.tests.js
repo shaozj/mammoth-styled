@@ -1,12 +1,13 @@
-var assert = require("assert");
+'use strict';
 
-var xml = require("../../lib/xml");
-var officeXmlReader = require("../../lib/docx/office-xml-reader");
-var test = require("../test")(module);
+const assert = require('assert');
+
+const xml = require('../../lib/xml');
+const officeXmlReader = require('../../lib/docx/office-xml-reader');
 
 
-test("mc:AlternateContent is replaced by contents of mc:Fallback", function() {
-    var xmlString =
+it('mc:AlternateContent is replaced by contents of mc:Fallback', function() {
+  const xmlString =
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<numbering xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">' +
         '<mc:AlternateContent>' +
@@ -18,7 +19,7 @@ test("mc:AlternateContent is replaced by contents of mc:Fallback", function() {
         '</mc:Fallback>' +
         '</mc:AlternateContent>' +
         '</numbering>';
-    return officeXmlReader.read(xmlString).then(function(element) {
-        assert.deepEqual(element.children, [xml.element("fallback")]);
-    });
+  return officeXmlReader.read(xmlString).then(function(element) {
+    assert.deepStrictEqual(element.children, [ xml.element('fallback') ]);
+  });
 });

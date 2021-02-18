@@ -1,42 +1,42 @@
-var assert = require("assert");
-
-var test = require("../test")(module);
-var html = require("../../lib/html");
-var writers = require("../../lib/writers");
+const assert = require('assert');
 
 
-test("text is HTML escaped", function() {
-    assert.equal(
-        generateString(html.text("<>&")),
-        "&lt;&gt;&amp;");
+const html = require('../../lib/html');
+const writers = require('../../lib/writers');
+
+
+it('text is HTML escaped', function() {
+  assert.strictEqual(
+    generateString(html.text('<>&')),
+    '&lt;&gt;&amp;');
 });
 
-test("double quotes outside of attributes are not escaped", function() {
-    assert.equal(
-        generateString(html.text('"')),
-        '"');
+it('double quotes outside of attributes are not escaped', function() {
+  assert.strictEqual(
+    generateString(html.text('"')),
+    '"');
 });
 
-test("element attributes are HTML escaped", function() {
-    assert.equal(
-        generateString(html.freshElement("p", {"x": "<"})),
-        '<p x="&lt;"></p>');
+it('element attributes are HTML escaped', function() {
+  assert.strictEqual(
+    generateString(html.freshElement('p', { x: '<' })),
+    '<p x="&lt;"></p>');
 });
 
-test("double quotes inside attributes are escaped", function() {
-    assert.equal(
-        generateString(html.freshElement("p", {"x": '"'})),
-        '<p x="&quot;"></p>');
+it('double quotes inside attributes are escaped', function() {
+  assert.strictEqual(
+    generateString(html.freshElement('p', { x: '"' })),
+    '<p x="&quot;"></p>');
 });
 
-test("element children are written", function() {
-    assert.equal(
-        generateString(html.freshElement("p", {}, [html.text("Hello")])),
-        '<p>Hello</p>');
+it('element children are written', function() {
+  assert.strictEqual(
+    generateString(html.freshElement('p', {}, [ html.text('Hello') ])),
+    '<p>Hello</p>');
 });
 
 function generateString(node) {
-    var writer = writers.writer();
-    html.write(writer, [node]);
-    return writer.asString();
+  const writer = writers.writer();
+  html.write(writer, [ node ]);
+  return writer.asString();
 }

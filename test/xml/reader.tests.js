@@ -1,85 +1,86 @@
-var assert = require("assert");
+'use strict';
 
-var xmlreader = require("../../lib/xml/reader");
-var test = require("../test")(module);
+const assert = require('assert');
+
+const xmlreader = require('../../lib/xml/reader');
 
 
-test('should read self-closing element', function() {
-    return xmlreader.readString("<body/>").then(function(result) {
-        assert.deepEqual({type: "element", name: "body", attributes: {}, children: []}, result);
-    });
+it('should read self-closing element', function() {
+  return xmlreader.readString('<body/>').then(function(result) {
+    assert.deepStrictEqual({ type: 'element', name: 'body', attributes: {}, children: [] }, { ...result });
+  });
 });
 
-test('should read empty element with separate closing tag', function() {
-    return xmlreader.readString("<body></body>").then(function(result) {
-        assert.deepEqual({type: "element", name: "body", attributes: {}, children: []}, result);
-    });
+it('should read empty element with separate closing tag', function() {
+  return xmlreader.readString('<body></body>').then(function(result) {
+    assert.deepStrictEqual({ type: 'element', name: 'body', attributes: {}, children: [] }, { ...result });
+  });
 });
 
-test('should read attributes of tags', function() {
-    return xmlreader.readString('<body name="bob"/>').then(function(result) {
-        assert.deepEqual({name: "bob"}, result.attributes);
-    });
+it('should read attributes of tags', function() {
+  return xmlreader.readString('<body name="bob"/>').then(function(result) {
+    assert.deepStrictEqual({ name: 'bob' }, result.attributes);
+  });
 });
 
-test('can read text element', function() {
-    return xmlreader.readString('<body>Hello!</body>').then(function(result) {
-        assert.deepEqual({type: "text", value: "Hello!"}, result.children[0]);
-    });
+it('can read text element', function() {
+  return xmlreader.readString('<body>Hello!</body>').then(function(result) {
+    assert.deepStrictEqual({ type: 'text', value: 'Hello!' }, result.children[0]);
+  });
 });
 
-test('should read element with children', function() {
-    return xmlreader.readString("<body><a/><b/></body>").then(function(root) {
-        assert.equal(2, root.children.length);
-        assert.equal("a", root.children[0].name);
-        assert.equal("b", root.children[1].name);
-    });
+it('should read element with children', function() {
+  return xmlreader.readString('<body><a/><b/></body>').then(function(root) {
+    assert.strictEqual(2, root.children.length);
+    assert.strictEqual('a', root.children[0].name);
+    assert.strictEqual('b', root.children[1].name);
+  });
 });
 
-test('unmapped namespaces URIs are included in braces as prefix', function() {
-    return xmlreader.readString('<w:body xmlns:w="word"/>').then(function(result) {
-        assert.deepEqual(result.name, "{word}body");
-    });
+it('unmapped namespaces URIs are included in braces as prefix', function() {
+  return xmlreader.readString('<w:body xmlns:w="word"/>').then(function(result) {
+    assert.deepStrictEqual(result.name, '{word}body');
+  });
 });
 
-test('mapped namespaces URIs are translated using map', function() {
-    var namespaceMap = {
-        "word": "x"
-    };
-    
-    return xmlreader.readString('<w:body xmlns:w="word"/>', namespaceMap).then(function(result) {
-        assert.deepEqual(result.name, "x:body");
-    });
+it('mapped namespaces URIs are translated using map', function() {
+  const namespaceMap = {
+    word: 'x',
+  };
+
+  return xmlreader.readString('<w:body xmlns:w="word"/>', namespaceMap).then(function(result) {
+    assert.deepStrictEqual(result.name, 'x:body');
+  });
 });
 
-test('namespace of attributes is mapped to prefix', function() {
-    var namespaceMap = {
-        "word": "x"
-    };
-    var xmlString = '<w:body xmlns:w="word" w:val="Hello!"/>';
-    return xmlreader.readString(xmlString, namespaceMap).then(function(result) {
-        assert.deepEqual(result.attributes["x:val"], "Hello!");
-    });
+it('namespace of attributes is mapped to prefix', function() {
+  const namespaceMap = {
+    word: 'x',
+  };
+  const xmlString = '<w:body xmlns:w="word" w:val="Hello!"/>';
+  return xmlreader.readString(xmlString, namespaceMap).then(function(result) {
+    assert.deepStrictEqual(result.attributes['x:val'], 'Hello!');
+  });
 });
 
-test('can find first element with name', function() {
-    return xmlreader.readString('<body><a/><b index="1"/><b index="2"/></body>').then(function(result) {
-        var first = result.first("b");
-        assert.equal("1", first.attributes.index);
-    });
+it('can find first element with name', function() {
+  return xmlreader.readString('<body><a/><b index="1"/><b index="2"/></body>').then(function(result) {
+    const first = result.first('b');
+    assert.strictEqual('1', first.attributes.index);
+  });
 });
 
-test('whitespace between xml declaration and root tag is ignored', function() {
-    return xmlreader.readString('<?xml version="1.0" ?>\n<body/>').then(function(result) {
-        assert.deepEqual("body", result.name);
-    });
+it('whitespace between xml declaration and root tag is ignored', function() {
+  return xmlreader.readString('<?xml version="1.0" ?>\n<body/>').then(function(result) {
+    assert.deepStrictEqual('body', result.name);
+  });
 });
 
-test('error if XML is badly formed', function() {
-    return xmlreader.readString("<bo").then(function(result) {
-        throw new Error("Expected failure");
-    }, function(error) {
-        assert.ok(error);
-        return 1;
-    });
+it('error if XML is badly formed', function() {
+  return xmlreader.readString('<bo').then(function() {
+    throw new Error('Expected failure');
+  }, function(error) {
+    assert.ok(error);
+    return 1;
+  });
 });
